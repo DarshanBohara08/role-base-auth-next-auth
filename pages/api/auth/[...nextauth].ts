@@ -29,13 +29,11 @@ export default NextAuth({
     async jwt({ token, user }) {
       /* Step 1: update the token based on the user object */
       console.log("user", user);
-      console.log("tokenCallback", token);
       if (user) {
         token.role = user.role;
       }
       return token;
     },
-
     session({ session, token }) {
       /* Step 2: update the session.user based on the token object */
       if (token && session.user) {
@@ -44,17 +42,8 @@ export default NextAuth({
       return session;
     },
   },
-  events: {
-    signIn(message) {
-      console.log("signin message", message);
-    },
-    signOut(message) {
-      console.log(message);
-    },
-  },
   pages: {
     signIn: "/login",
     signOut: "/",
   },
-  debug: true,
 });
