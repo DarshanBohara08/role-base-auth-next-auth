@@ -4,12 +4,20 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-
-    // Or if using `src` directory:
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+
   theme: {
-    extend: {},
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: "1rem",
+      },
+    },
+    extend: {
+      colors: {
+        colorBlack: "#1c1c1c",
+      },
+    },
   },
   plugins: [],
 };
