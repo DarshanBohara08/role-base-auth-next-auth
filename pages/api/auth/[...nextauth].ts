@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth from "next-auth";
 import { userService } from "../../../service/UserService";
-if (!process.env.NEXT_PUBLIC_NEXTAUTH_SECRET) {
+if (!process.env.NEXTAUTH_SECRET) {
   throw new Error("Please provide process.env.NEXT_PUBLIC_NEXTAUTH_SECRET");
 }
 
@@ -20,21 +20,23 @@ export default NextAuth({
           throw new Error("No credentials.");
         }
         const { email, password } = credentials;
-        console.log("Credentials", credentials);
         return userService.signInCredentials(email, password);
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account, profile, session }) {
       /* Step 1: update the token based on the user object */
-      console.log("user", user);
       if (user) {
         token.role = user.role;
       }
       return token;
     },
+
     session({ session, token }) {
+      console.log("session", session);
+      console.log("sessionToken", token);
+
       /* Step 2: update the session.user based on the token object */
       if (token && session.user) {
         session.user.role = token.role;
@@ -46,4 +48,5 @@ export default NextAuth({
     signIn: "/login",
     signOut: "/",
   },
+  secret: process.env.NEXTAUTH_SECRET,
 });

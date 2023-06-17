@@ -2,7 +2,7 @@ import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import * as Yup from "yup";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { IValue } from "../interfaces";
 
 const validationSchema = Yup.object().shape({
@@ -11,23 +11,27 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login = () => {
+  const { data } = useSession();
   const [error, setError] = useState("");
   const router = useRouter();
-  const callbackUrl = decodeURI(
-    (router.query?.callbackUrl as string) ?? "/admin"
-  );
+  const callbackUrl =
+    data?.user?.role === "admin"
+      ? "/admin/adminDashboard"
+      : data?.user?.role === "user"
+      ? "/user/userDashboard"
+      : data?.user?.role === "store" && "store/storeDashboard";
   const handleSubmit = async (values: IValue): Promise<void> => {
     const result = await signIn("credentials", {
       email: values?.email,
       password: values?.password,
-      callbackUrl: callbackUrl ?? "/admin",
       redirect: false,
     });
+
     if (result?.error) {
       setError(result.error);
     }
 
-    if (result?.ok) {
+    if (result?.ok && callbackUrl) {
       router.push(callbackUrl);
     }
   };

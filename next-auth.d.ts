@@ -4,6 +4,7 @@ import { DefaultSession, DefaultUser } from "next-auth";
 export enum Role {
   user = "user",
   admin = "admin",
+  store = "store",
 }
 // common interface for JWT and Session
 interface IUser extends DefaultUser {

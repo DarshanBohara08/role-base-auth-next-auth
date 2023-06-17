@@ -12,5 +12,12 @@
     "name": "Test User",
     "role": "user",
     "id": "002"
+  },
+  {
+    "email": "darshanadmin@email.com",
+    "password": "@Password123",
+    "name": "Darshan Bohara",
+    "role": "admin",
+    "id": "003"
   }
 ]

@@ -3,7 +3,7 @@ import Link from "next/link";
 import Head from "next/head";
 import { navigation } from "../constant/navgigation";
 import { useRouter } from "next/router";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 type Props = {
   children?: ReactNode;
@@ -12,6 +12,9 @@ type Props = {
 
 const Layout = ({ children, title = "This is the default title" }: Props) => {
   const route = useRouter();
+  const { data, status } = useSession();
+
+  const nav = navigation?.filter((i) => i.role === data?.user?.role);
   return (
     <div>
       <Head>
@@ -21,7 +24,7 @@ const Layout = ({ children, title = "This is the default title" }: Props) => {
       </Head>
       <header className="bg-gray-600 py-5 text-white flex flex-row justify-between px-32 text-xl">
         <nav className="flex flex-row gap-20">
-          {navigation?.map((nav) => {
+          {nav?.map((nav) => {
             return (
               <>
                 <Link href={nav.link}>{nav.label}</Link>
